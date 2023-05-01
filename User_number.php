@@ -14,7 +14,7 @@ $stmt = $conn->prepare("SELECT COUNT(*) FROM users");
 
 $stmt->execute(); // menjalankan query
 
-$result = $stmt->fetch(); // hasil dair query, semacam return value
+$result = $stmt->fetch(); // hasil dair query, seperti return value
 $total_users = $result[0];
 
 echo "Total number of users: $total_users";
