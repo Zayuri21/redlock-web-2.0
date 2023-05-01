@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+    db:
+        # Memberikan nama container untuk services db
+        container_name: redlock-db
+        # Memberikan nama image untuk services db
+        image: mysql
+        # Selalu restart layanan apabila terhenti atau dihentikan
+        restart: always
+        # Environment variable yang diperlukan untuk menjalankan layanan MySQL
+        environment:
+            MYSQL_ROOT_USERNAME: root
+            MYSQL_ROOT_PASSWORD: root
+        # Memetakan volume dari host ke dalam container
+        volumes:
+            - ./redlock-db.sql:/docker-entrypoint-initdb.d/redlock-db.sql
+
+    php-apache-environment:
+        # Membangun image dari Dockerfile di direktori saat ini
+        build:
+            context: .
+            dockerfile: Dockerfile
+        # Memberikan nama image untuk php-apache-environment
+        image: redlock-web-2.0
+        # Services ini bergantung pada services db
+        depends_on:
+            - db
+        # Memetakan volume dari host ke dalam container
+        volumes:
+            - ./index.php:/var/www/html/index.php
+        # Menetapkan port pada host dan container yang akan digunakan
+        ports:
+            - "7077:80"
